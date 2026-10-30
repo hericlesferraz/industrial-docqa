@@ -20,6 +20,42 @@ Read the numbers with these caveats:
   set was not used for that, but its questions were used to choose the search (retrieval measurements).
 - One run per question (`--repeat 1`): model outputs vary between runs, so a single failure or success is one sample.
 
+## Unfixed failures
+
+The scored run below has 11 misses out of 73, reported as measured: no reference was changed after seeing the results.
+All 11 fail at `generation`: for every question with an expected page, that page was among the 8 passages sent to the
+model, so none is a retrieval failure. By cause:
+
+1. **pub-04, 5 of the 11 (the public question, its design-set copy and three translations): the answer stops at the
+   product line.** The question asks for the warranty of WEG-CESTARI gear units. The warranty section (pp. 24, 50, 76)
+   lists products, 12 months from the invoice, and services, 6 months; the public reference expects both. In every
+   language the model gives the product line, cites it, and leaves services out: incomplete, not wrong. Rule 4 of the
+   prompt already asks for every value the passages give for what was asked, but the model reads services as outside
+   the question. A stronger rule ("every category the cited passage lists for the subject") has to be measured on the
+   whole eval, since it can lengthen answers and add misses elsewhere, and it did not fit in the time box. Next: that
+   rule, with its acceptance check fixed beforehand.
+2. **x-09 and c-01 (partial): the value is right, a qualifier on the page is missing.** x-09 answers "45° maximum"
+   from the figure label, while the caution text on the same page says "45° from vertical"; the judge also asks for
+   "no spreader bar", a condition the question itself gives. c-01 identifies the HN10-WD plug as the hexagonal
+   oil-level plug, but says neither that the oil level must reach it nor that the gear unit must be stopped in its
+   working position to check it. Same family as pub-04, and the same next step.
+3. **x-11 (counted unsafe): a judge false positive.** The page says "frequency not more than +5% and voltage not more
+   than +10% above or below nameplate rating". The answer repeats it, and the reference writes ±5%, the usual reading
+   of that sentence; the judge marked the answer contradicted. It is the only unsafe verdict in the run, and one
+   reason the judge is still provisional (caveats above).
+4. **c-04 (over-cautious): a case between two prompt rules.** The question asks for a sound power level and gives no
+   frequency. The table on p. 47 is for 60 Hz, and its note 3 lowers 50 Hz values by 3 dB(A) for 4 poles: a default
+   and an exception, which rule 5 of the prompt answers as `answered` (87 dB(A), with the 50 Hz note). The model read
+   the frequency as an open condition and answered `ambiguous` with both cases: safe, but not what the rule asks.
+5. **pub-02-de and x-19 (over-cautious): refusals on the safe side.** pub-02-de is the German translation of the
+   public relubrication question: the expected page (LB5001 p. 2) ranked first, and the model answered that the
+   passages give only grease amounts. The same question passes in English, Portuguese and Spanish, and this is one
+   sample (`--repeat 1`). x-19 asks the minimum start temperature with splash lubrication; the table says "immersion
+   lubrication" (+7 °C for ISO VG 320 mineral oil), the oil bath that splash lubrication uses in a gear unit, and the
+   model declined because the word is not on the page. Not fixed because loosening "only what the passages say" to
+   accept equivalent terms would trade these refusals for wrong answers elsewhere. Next: repeated runs, to tell noise
+   from a pattern.
+
 ## Scored run: public, design and holdout sets
 
 | | |

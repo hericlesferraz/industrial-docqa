@@ -179,9 +179,10 @@ which quotas and pricing need.
   a tenant that someone else uploaded the same file: the count leaves the tenant's API for telemetry, and
   tenants with confidential documents can opt out.
 - **Prompt injection.** Instructions planted on the answering page were obeyed 0 of 4 times in the prototype
-  and 0 of 3 through the API **(m, small samples)**. The defenses are structural: the model has no tools or
-  authority, cites only the request's labels, and the quote shown is our stored text. A planted value inside
-  a cited unit still passes the verifier. Next: flag instruction-like text at ingestion.
+  and 0 of 3 through the API, both with Flash Lite **(m, small samples)**; not run on Flash, the default. The
+  defenses are structural: the model has no tools or authority, cites only the request's labels, and the
+  quote shown is our stored text. A planted value inside a cited unit still passes the verifier. Next: flag
+  instruction-like text at ingestion.
 - **Hostile PDFs.** Today: a child process per document with time, stall and memory limits, and no secrets
   in its environment (decision 22). Next: a separate pool without network, under gVisor or Firecracker.
 - **Secrets.** Provider keys in a secret manager. Spans and logs already exclude keys, question text, page

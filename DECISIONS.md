@@ -1362,7 +1362,7 @@ self-hosted model is a question for production scale.
 | Answer-call latency | p50 1.2 s, p95 2.3 s, max 7.2 s (66 calls) | not measurable: 11–280 s, unrelated to output size |
 | Median tokens, input / output | 3,014 / 79 | 2,848 / 110 |
 | Cost per question, list price | about $0.0011 | about $0.0032 |
-| Planted injections obeyed | 0 of 4 | not run |
+| Planted injections obeyed | 0 of 4 in the prototype, 0 of 3 through the API | not run |
 
 - **Thinking made no difference on Flash Lite.** With `low`, it produced thinking tokens on 2 of 18
   questions and changed no status.
@@ -1486,16 +1486,16 @@ the product's rule: a wrong answer is worse than none.
 - **Skip and report, rather than fail fast.** A new set brings files we have never seen; a renamed
   file or one malformed line must not turn the whole report into nothing.
 - **Two numbers, because the errors aren't symmetric.** An average hides whether the misses are guesses or
-  refusals. In the committed run: 62 of 73 correct, 1 unsafe, 3 over-cautious. The unsafe one (x-11) and
-  one over-cautious (c-04) are errors in our draft references (below).
+  refusals. In the committed run: 62 of 73 correct, 1 unsafe, 3 over-cautious. The unsafe one (x-11) is a
+  judge false positive, and one over-cautious (c-04) falls between two prompt rules (below).
 - **Facts instead of a score.** A 3 out of 5 can't be audited; "missing: services, 6 months" can, and the
   report prints it next to the reference.
 - **The rule in code, the reading in the model.** The model does what it is good at; the threshold is
   fixed, versioned and tested.
 - **Independent checks catch the judge and the references.** The first judge prompt marked an answer
   partial for not repeating a condition the question itself gave. With the second, x-11 came out
-  contradicted: the answer gives the manual's "+5%" for frequency, and our reference had written "±5%".
-  The numeric cross-check flagged both. Reading the PDF independently found 3 of 44
+  contradicted: the answer gives the manual's "+5% … above or below" for frequency, and our reference "±5%",
+  the same range. The numeric cross-check flagged both. Reading the PDF independently found 3 of 44
   text-layer quotes that aren't literally in the PDF, all artifacts of the extractor: two split headers
   and a figure marker.
 - **The failure stage says where to look.** All 11 misses of the committed run are `generation`. On 10
@@ -1509,10 +1509,10 @@ the product's rule: a wrong answer is worse than none.
   human labels. 46 cases with draft labels exist, but the meta-evaluation hasn't been run: agreement, and
   above all false "correct" verdicts, the direction that would hide an unsafe answer. Correct and unsafe
   inherit the judge's errors.
-- 30 held-out reference answers are drafts written from the cited page, not yet reviewed. Two are wrong
-  against their page: x-11 (above), and c-04, which expects the 60 Hz value although the question gives no
-  frequency and the page's note gives the 50 Hz one, so the model's `ambiguous` follows the product's rule.
-  The report scores both as written. The design set is not independent. Each question ran once.
+- 30 held-out reference answers are drafts written from the cited page, not yet reviewed. Two are disputed:
+  x-11, where the judge, not the reference, is wrong (above), and c-04, which expects the 60 Hz value. Its page
+  gives a 60 Hz table and a note for 50 Hz, a default and an exception that rule 5 of the prompt answers as
+  `answered`; the model read the frequency as an open condition. The report scores both as written. The design set is not independent. Each question ran once.
 - The expected position is measured per page, not per chunk: when the right page reaches the model through
   the wrong chunk, the miss is classified as `generation`.
 - The language of the answer isn't measured.
@@ -1734,8 +1734,9 @@ production items in order.
 - **The answer's language.** With only Portuguese passages available, Flash Lite once answered an English
   question in Portuguese (one sample), and the eval doesn't measure language. Next: measure it per `lang`
   before touching the prompt.
-- **A two-part question can come back with one part.** The public warranty question omits the 6 months for
-  services in every language, with that line in the prompt (decision 12).
+- **An answer can stop at the first category the page lists.** The public warranty question asks about gear
+  units; the page gives 12 months for products and 6 for services, and the answer leaves services out in every
+  language, with that line in the prompt (decision 12). The eval report comments on it under "Unfixed failures".
 
 ### Platform and operations
 
