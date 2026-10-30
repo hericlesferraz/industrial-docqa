@@ -1,0 +1,143 @@
+{
+  "description": "Ten public industrial manuals from outside the case, used to test generalization. The PDFs are not in the repository: fetch.py downloads each one from its original URL into eval/external/pdfs/ and checks the sha256 recorded here (files downloaded on 2026-10-30). Pages are 1-based positions in the PDF.",
+  "documents": [
+    {
+      "file": "tm5-5060_leroi_air_compressor_1942_scan.pdf",
+      "title": "TM 5-5060, Maintenance Manual and Parts Catalog, Motorized Air Compressor Model 105 GA, Le Roi Company (War Department, 30 November 1942)",
+      "url": "https://archive.org/download/TM5-5060/TM5-5060.pdf",
+      "source_page": "https://archive.org/details/TM5-5060",
+      "sha256": "69f7fda36285486a5efabef8e636616af685b5e823adac0c34264725df989f0e",
+      "bytes": 48072985,
+      "pages": 229,
+      "languages": ["en"],
+      "scanned": true,
+      "license": "US government work in the public domain, marked Public Domain Mark 1.0 on archive.org.",
+      "tests": "A typewritten 1942 scan with no text layer, so every page goes to OCR; the OCR model's recitation filter refuses its prose pages (36 of the 60 kept), a lubrication chart drawn with labels, and decimal points glued to dot leaders (.015\").",
+      "excerpt": {
+        "file": "tm5-5060_leroi_air_compressor_1942_scan_p1-60.pdf",
+        "first_page": 1,
+        "last_page": 60,
+        "sha256": "85940f147b56284457a95d7fb0ad2dc63864b29c4afb9a73b47437b91cb9fc17",
+        "bytes": 13579951,
+        "rule": "Only pages 1-60 of the original go into the eval folder, with the same page numbers: PyMuPDF insert_pdf(from_page=0, to_page=59) into a new PDF saved with garbage=3, deflate=True, no_new_id=True (the sha256 above is what PyMuPDF 2.0 writes). OCR of all 229 pages was projected above the budget of the run; pages 1-60 hold the introduction, the specifications and the operator instructions, with the lubrication section on pages 45-51."
+      }
+    },
+    {
+      "file": "dtic_ada385179_blower_om_manual_1996_scan.pdf",
+      "title": "Bioventing Blower System Operation and Maintenance Manual (Parsons Engineering Science for the US Air Force, DTIC ADA385179, 1996)",
+      "url": "https://archive.org/download/DTIC_ADA385179/DTIC_ADA385179.pdf",
+      "source_page": "https://archive.org/details/DTIC_ADA385179",
+      "sha256": "51b9f86deb4451ac2dec48870aafbad4f2fb65124823cf755aaa6fb147744ae0",
+      "bytes": 2197584,
+      "pages": 36,
+      "languages": ["en"],
+      "scanned": true,
+      "license": "US Air Force technical report, Distribution Statement A on its cover: approved for public release, distribution unlimited.",
+      "tests": "A 1996 scan with no text layer: maintenance schedule tables, a manufacturer's service sheet with a striped-background table, and an answer spread over two pages."
+    },
+    {
+      "file": "ingersoll-rand_vertical_pumps_1943_scan.pdf",
+      "title": "Ingersoll-Rand, Instructions for Vertical Pumps, classes APM and APS (Cameron Pump Division, 1943)",
+      "url": "https://archive.org/download/ingersoll-rand-instructions-vertical-pumps-1943/Ingersoll_Rand_Instructions_Vertical_Pumps_1943.pdf",
+      "source_page": "https://archive.org/details/ingersoll-rand-instructions-vertical-pumps-1943",
+      "sha256": "071caabd3c3561aa2684b9daf7ec139f77e99d26270c689409482679d0ad3f69",
+      "bytes": 3487151,
+      "pages": 10,
+      "languages": ["en"],
+      "scanned": true,
+      "license": "1943 US commercial publication marked Public Domain Mark 1.0 by its archive.org uploader; not a government work.",
+      "tests": "A short low-resolution scan with no text layer, and numbers spelled out in words (\"three to four drops\")."
+    },
+    {
+      "file": "skf_bearing_maintenance_handbook_en.pdf",
+      "title": "SKF bearing maintenance handbook",
+      "url": "https://cdn.skfmediahub.skf.com/api/public/0901d1968013be94/pdf_preview_medium/0901d1968013be94_pdf_preview_medium.pdf",
+      "source_page": "SKF's official media CDN (cdn.skfmediahub.skf.com); no catalog page found",
+      "sha256": "fb187363e7909b42f448eee2f9e15881138d6ffd6176699ea315175b70101bcf",
+      "bytes": 14182652,
+      "pages": 454,
+      "languages": ["en"],
+      "scanned": false,
+      "license": "Public download from SKF, copyright SKF; not redistributed here.",
+      "tests": "A large catalog (454 pages) with a text layer: long tables split across chunks with a title row above the column header, decimal commas in English text, and photo and drawing pages without text that go to OCR."
+    },
+    {
+      "file": "tm5-692-1_c4isr_maintenance_practices_2005.pdf",
+      "title": "TM 5-692-1, Maintenance of Mechanical and Electrical Equipment at C4ISR Facilities (US Army Corps of Engineers, 2005)",
+      "url": "https://www.wbdg.org/FFC/ARMYCOE/COETM/tm_5_692_1.pdf",
+      "source_page": "https://www.wbdg.org/ (Army Corps of Engineers technical manuals)",
+      "sha256": "32f967c0ac93e6f9fff72e0d91ec9e83ffb58a26bf58494de37ca8d2185be1e8",
+      "bytes": 6377475,
+      "pages": 261,
+      "languages": ["en"],
+      "scanned": false,
+      "license": "US government work in the public domain.",
+      "tests": "A large manual (261 pages) with dozens of similar maintenance-interval tables, one per system, and a near-miss question whose table names the test but gives no value."
+    },
+    {
+      "file": "nord_b1000_getriebe_de.pdf",
+      "title": "NORD Drivesystems B 1000 de, Getriebe, Handbuch mit Montageanleitung (edition 2424)",
+      "url": "https://media.nord.com/res/Document/235052.pdf",
+      "source_page": "https://www.nord.com/ (documentation centre; its search returns the PDF)",
+      "sha256": "5784cc0280c083753fc198484647904ca68ced3e43dd8cde037efa93a04b0d15",
+      "bytes": 4041832,
+      "pages": 84,
+      "languages": ["de"],
+      "scanned": false,
+      "license": "Public download from NORD Drivesystems, copyright NORD; not redistributed here.",
+      "tests": "A German manual asked in English and Portuguese: maintenance and torque tables, a merged cell split over two rows, drawing pages without text that go to OCR, and the same facts as the Spanish edition."
+    },
+    {
+      "file": "nord_b1000_reductores_es.pdf",
+      "title": "NORD Drivesystems B 1000 es, Reductores, Manual con instrucciones de montaje (edition 2424)",
+      "url": "https://media.nord.com/res/Document/235036.pdf",
+      "source_page": "https://www.nord.com/ (documentation centre; its search returns the PDF)",
+      "sha256": "79a492b4125ef27f5218ef0e86ca5f11abeadd50c3dbd0b9fd53128a303c06e3",
+      "bytes": 4049174,
+      "pages": 84,
+      "languages": ["es"],
+      "scanned": false,
+      "license": "Public download from NORD Drivesystems, copyright NORD; not redistributed here.",
+      "tests": "The Spanish edition of the same manual: one fact in two documents and two languages, so either one is a valid citation."
+    },
+    {
+      "file": "leroy-somer_4850_moteurs_installation_maintenance_fr.pdf",
+      "title": "Leroy-Somer, Moteurs asynchrones triphasés, Installation et mise en service, référence 4850 fr - 2026.05 / i (the server delivers 4850i_fr.pdf)",
+      "url": "https://www.leroy-somer.com/documentation_pdf/4850_fr.pdf",
+      "source_page": "https://www.leroy-somer.com/",
+      "sha256": "6ae97cfffe5f094ae994ca5d5c582a990f8deb5c72307c5b529b0c57b5004697",
+      "bytes": 13032536,
+      "pages": 56,
+      "languages": ["fr"],
+      "scanned": false,
+      "license": "Public download from Nidec Leroy-Somer, copyright Leroy-Somer; not redistributed here.",
+      "tests": "A French manual asked in Portuguese: storage and regreasing rules that depend on a grease grade the question leaves out (ambiguous)."
+    },
+    {
+      "file": "bonfiglioli_hdp_hdo_iom_it.pdf",
+      "title": "Bonfiglioli, Serie HDP, HDO, Manuale installazione uso e manutenzione (ATEX version, rev. 07_1)",
+      "url": "https://www.bonfiglioli.com/_default_upload_bucket/BR_IOM_HDPO_ATX_ITA_R07_1.pdf",
+      "source_page": "https://www.bonfiglioli.com/",
+      "sha256": "b65ec299537b83a8eae16e6d6bda5490df0e3e6949c3ed1a06ca7e665447d628",
+      "bytes": 14116417,
+      "pages": 96,
+      "languages": ["it"],
+      "scanned": false,
+      "license": "Public download from Bonfiglioli, copyright Bonfiglioli; not redistributed here.",
+      "tests": "An Italian manual asked in English: an oil-change table by temperature with a footnote, headers split mid-word in the text layer, and the slowest text extraction measured (vector drawings)."
+    },
+    {
+      "file": "abb_lv_motors_manual_multilingual_2004.pdf",
+      "title": "ABB, Low Voltage Motors, Installation, operation and maintenance manual, edition 12/2004 (GB, DE, FR, ES, IT, SE and FI sections in one file)",
+      "url": "https://library.e.abb.com/public/2479deaf4f26781bc1257b1a005a7d26/LVStdMotorManual_ML_12_2004.pdf",
+      "source_page": "https://new.abb.com/motors-generators/iec-low-voltage-motors/manuals",
+      "sha256": "814ecc8a57ff4b1c61378683ffa7b69970aa1075e2ca85af3c266806e48b19c7",
+      "bytes": 474570,
+      "pages": 88,
+      "languages": ["en", "de", "fr", "es", "it", "sv", "fi"],
+      "scanned": false,
+      "license": "Public download from ABB, copyright ABB; not redistributed here.",
+      "tests": "One file with the same lubrication table in seven languages, so any of seven pages is a valid citation, and a column header split across rows in the text layer."
+    }
+  ]
+}

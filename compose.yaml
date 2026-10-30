@@ -1,0 +1,64 @@
+name: docqa
+
+x-app: &app
+  build: { context: ., target: runtime }
+  image: docqa:local
+  env_file: [{ path: .env, required: false }]
+  environment:
+    GEMINI_API_KEY: ${GEMINI_API_KEY:-}
+    ADMIN_API_KEY: ${ADMIN_API_KEY:-local-dev-admin-key-change-me}
+    DATABASE_URL: postgresql://docqa:docqa@db:5432/docqa
+    BLOB_STORE_PATH: /data/blobs
+  volumes: [blobs:/data]
+  depends_on: { db: { condition: service_healthy } }
+
+services:
+  db:
+    image: pgvector/pgvector:pg16@sha256:7b822b0aac60967beb1ea5e576b8602c94c300a157d187f385ae3e0da199b90a
+    environment: { POSTGRES_USER: docqa, POSTGRES_PASSWORD: docqa, POSTGRES_DB: docqa }
+    volumes: [pgdata:/var/lib/postgresql/data]
+    healthcheck: { test: ["CMD-SHELL", "pg_isready -U docqa -d docqa"], interval: 2s, timeout: 3s, retries: 30 }
+
+  api:
+    <<: *app
+    command: ["uvicorn", "docqa.api.app:create_app_from_env", "--factory", "--host", "0.0.0.0", "--port", "8000", "--no-access-log"]
+    ports: ["8000:8000"]
+    restart: on-failure:5
+    healthcheck:
+      test: ["CMD", "python", "-c", "import sys,urllib.request; sys.exit(0 if urllib.request.urlopen('http://localhost:8000/healthz', timeout=3).status == 200 else 1)"]
+      interval: 5s
+      timeout: 5s
+      retries: 30
+      start_period: 120s
+
+  worker:
+    <<: *app
+    command: ["python", "-m", "docqa.worker"]
+    restart: on-failure:5
+    stop_grace_period: 30s
+    healthcheck: { test: ["CMD", "python", "-m", "docqa.worker", "--healthcheck"], interval: 10s, timeout: 5s, retries: 6, start_period: 60s }
+
+  eval:
+    <<: *app
+    profiles: [eval]
+    environment:
+      GEMINI_API_KEY: ${GEMINI_API_KEY:-}
+      ADMIN_API_KEY: ${ADMIN_API_KEY:-local-dev-admin-key-change-me}
+      EVAL_API_URL: http://api:8000
+      HOME: /tmp
+    volumes: []
+    depends_on: { api: { condition: service_healthy }, worker: { condition: service_healthy } }
+    entrypoint: ["python", "-m", "docqa.evaluation"]
+
+  test:
+    <<: *app
+    profiles: [test]
+    environment:
+      GEMINI_API_KEY: unused-in-tests
+      ADMIN_API_KEY: test-admin-key
+      DATABASE_URL: postgresql://docqa:docqa@db:5432/docqa_test
+      BLOB_STORE_PATH: /tmp/blobs
+    volumes: [".:/app:ro"]
+    command: ["pytest", "-q", "-p", "no:cacheprovider"]
+
+volumes: { pgdata: {}, blobs: {} }

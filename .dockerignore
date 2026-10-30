@@ -1,0 +1,11 @@
+.git
+.env
+case_files
+eval/out
+eval/external/pdfs
+eval/external/originals
+tests
+**/__pycache__
+.venv
+.ruff_cache
+.pytest_cache

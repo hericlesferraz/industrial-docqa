@@ -1,0 +1,9 @@
+.env
+eval/out/
+eval/fixtures/pdfs/
+eval/external/pdfs/
+eval/external/originals/
+__pycache__/
+.pytest_cache/
+.ruff_cache/
+.venv/
